@@ -12,8 +12,8 @@ API endpoints for managing products and warehouses.
 
 ## Technologies Used:
 
-.NET Core
-Entity Framework Core
+.NET Core, 
+Entity Framework Core, 
 C#
 
 ## Important Notes:
