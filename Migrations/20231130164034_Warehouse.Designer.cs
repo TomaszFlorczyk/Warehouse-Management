@@ -11,8 +11,8 @@ using WarehouseMenagementAPI.Models;
 namespace WarehouseMenagementAPI.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20231129174514_Products")]
-    partial class Products
+    [Migration("20231130164034_Warehouse")]
+    partial class Warehouse
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,10 @@ namespace WarehouseMenagementAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
