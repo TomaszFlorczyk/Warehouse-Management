@@ -2,6 +2,31 @@
 {
     public class RandomProductGenerator
     {
-        public static readonly Random RandomProdductGenerator = new Random();
+        private static readonly Random _randomProductGenerator = new Random();
+
+        public static string GenerateRandomProductName()
+        {
+            string[] possibleNames = { "Meblokart", "Eleganta", "Furnitex", "Stylux", "EkoDesign", "LuksusPlus" };
+            return possibleNames[_randomProductGenerator.Next(possibleNames.Length)];
+        }
+
+        public static string GenerateRandomProductType()
+        {
+            string[] possibleTypes = { "Sofa", "Bed", "Wardrobe", "Chair", "Corner", "IKEA" , "Mattress"};
+            return possibleTypes[_randomProductGenerator.Next(possibleTypes.Length)];
+        }
+
+        public static string GenerateRandomPostalCode()
+        {
+            int firstPart = _randomProductGenerator.Next(9);
+            int secondPart = _randomProductGenerator.Next(1000);
+
+            return $"{firstPart}+{secondPart}";
+        }
+
+        public static decimal GenerateRandomProducPrice()
+        {
+            return Math.Round((decimal)_randomProductGenerator.NextDouble() * 1000, 2);
+        }
     }
 }
