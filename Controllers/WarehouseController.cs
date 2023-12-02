@@ -19,32 +19,34 @@ namespace WarehouseMenagementAPI.Controllers
         [HttpPost("AddRandomProducts")]
         public IActionResult AddRandomProdducts()
         {
-            for(int i = 0; i < 20; i++)
+            for(int i = 0; i < 100; i++)
             {
+                string postalCode = RandomProductGenerator.GenerateRandomPostalCode();
                 Product randomProduct = new Product
                 {
                     Type = RandomProductGenerator.GenerateRandomProductType(),
                     Name = RandomProductGenerator.GenerateRandomProductName(),
                     Price = RandomProductGenerator.GenerateRandomProducPrice(),
-                    PostalCode = RandomProductGenerator.GenerateRandomPostalCode()
+                    PostalCode = postalCode,
+                    AlleyId = RandomProductGenerator.GenerateAlleyIdFromPostalCode(postalCode)
                 };
 
-                bool productExists = _dbContext.Products
+                bool productExists = _dbContext.ProductDelivery
                     .Any(p => p.Name == randomProduct.Name && p.Type == randomProduct.Type);
 
                 if (!productExists)
                 {
-                    _dbContext.Products.Add(randomProduct);
+                    _dbContext.ProductDelivery.Add(randomProduct);
                 }
                 else
                 {
-                    var existingProduct = _dbContext.Products
+                    var existingProduct = _dbContext.ProductDelivery
                         .FirstOrDefault(p => p.Name == randomProduct.Name && p.Type == randomProduct.Type);
 
                     if (existingProduct != null)
                     {
                         randomProduct.Price = existingProduct.Price;
-                        _dbContext.Products.Add(randomProduct);
+                        _dbContext.ProductDelivery.Add(randomProduct);
                     }
                 }
             }

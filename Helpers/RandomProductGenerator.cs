@@ -28,5 +28,14 @@
         {
             return Math.Round((decimal)_randomProductGenerator.NextDouble() * 1000, 2);
         }
+
+        public static int GenerateAlleyIdFromPostalCode(string postalCode)
+        {
+            if(!string.IsNullOrEmpty(postalCode) && char.IsDigit(postalCode[0])) 
+            {
+                return int.Parse(postalCode[0].ToString());
+            }
+            return 0;
+        }
     }
 }

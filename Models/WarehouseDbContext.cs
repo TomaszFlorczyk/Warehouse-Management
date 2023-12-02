@@ -9,11 +9,16 @@ namespace WarehouseMenagementAPI.Models
 
         }
         public DbSet<Warehouse> Warehouses { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Product> ProductDelivery { get; set; }
+        public DbSet<SentProducts> SentProducts { get; set; }
+        public DbSet<Alley> Alleys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<SentProducts>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");
 
