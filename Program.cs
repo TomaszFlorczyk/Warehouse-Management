@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WarehouseMenagementAPI.Models;
+using WarehouseMenagementAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<WarehouseDbContext>(
     options => options.UseSqlServer(configuration.GetConnectionString("WarehouseDBConnection")));
+builder.Services.AddScoped<WarehouseService>();
 
 var app = builder.Build();
 

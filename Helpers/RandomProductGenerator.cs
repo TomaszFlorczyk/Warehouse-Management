@@ -18,7 +18,7 @@
 
         public static string GenerateRandomPostalCode()
         {
-            int firstPart = _randomProductGenerator.Next(9);
+            int firstPart = _randomProductGenerator.Next(10);
             int secondPart = _randomProductGenerator.Next(9999);
 
             return $"{firstPart}{secondPart}";

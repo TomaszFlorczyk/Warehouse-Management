@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WarehouseMenagementAPI.Exceptions;
 using WarehouseMenagementAPI.Helpers;
 using WarehouseMenagementAPI.Models;
+using WarehouseMenagementAPI.Services;
 
 namespace WarehouseMenagementAPI.Controllers
 {
@@ -10,16 +12,18 @@ namespace WarehouseMenagementAPI.Controllers
     public class WarehouseController : ControllerBase
     {
         private readonly WarehouseDbContext _dbContext;
+        private readonly WarehouseService _warehouseService;
 
-        public WarehouseController(WarehouseDbContext dbContext) 
-        { 
+        public WarehouseController(WarehouseDbContext dbContext, WarehouseService warehouseService)
+        {
             _dbContext = dbContext;
+            _warehouseService = warehouseService;
         }
 
         [HttpPost("AddRandomProducts")]
         public IActionResult AddRandomProdducts()
         {
-            for(int i = 0; i < 100; i++)
+            for (int i = 0; i < 100; i++)
             {
                 string postalCode = RandomProductGenerator.GenerateRandomPostalCode();
 
@@ -60,6 +64,19 @@ namespace WarehouseMenagementAPI.Controllers
             }
             _dbContext.SaveChanges();
             return Ok("Random products was succesfuly added");
+        }
+
+        [HttpPost("AddWarehouse")]
+        public async Task<IActionResult> AddWarehouse([FromQuery] string name)
+        {
+            var result =  await _warehouseService.AddWarehouseAsync(name);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
         }
     }
 }
