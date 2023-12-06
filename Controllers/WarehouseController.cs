@@ -22,13 +22,21 @@ namespace WarehouseMenagementAPI.Controllers
             for(int i = 0; i < 100; i++)
             {
                 string postalCode = RandomProductGenerator.GenerateRandomPostalCode();
+
+                int alleyId = RandomProductGenerator.GenerateAlleyIdFromPostalCode(postalCode);
+                bool alleyExists = _dbContext.Alleys.Any(a => a.Id == alleyId);
+
+                if (!alleyExists)
+                {
+                    continue;
+                }
                 Product randomProduct = new Product
                 {
                     Type = RandomProductGenerator.GenerateRandomProductType(),
                     Name = RandomProductGenerator.GenerateRandomProductName(),
                     Price = RandomProductGenerator.GenerateRandomProducPrice(),
                     PostalCode = postalCode,
-                    AlleyId = RandomProductGenerator.GenerateAlleyIdFromPostalCode(postalCode)
+                    AlleyId = alleyId
                 };
 
                 bool productExists = _dbContext.ProductDelivery

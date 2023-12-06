@@ -7,7 +7,8 @@
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string PostalCode { get; set; }
-        public Alley Alley { get; set; }
+
         public int AlleyId { get; set; }
+        public Alley Alley { get; set; }
     }
 }
