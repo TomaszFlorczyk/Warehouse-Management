@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
-using WarehouseMenagementAPI.Exceptions;
+﻿using System.Net;
+using WarehouseMenagementAPI.Interfaces;
 using WarehouseMenagementAPI.Models;
 using WarehouseMenagementAPI.Services.Models;
 
 namespace WarehouseMenagementAPI.Services
 {
-    public class WarehouseService
+    public class WarehouseService : IWarehouseService
     {
         private readonly WarehouseDbContext _dbContext;
 
@@ -62,6 +61,57 @@ namespace WarehouseMenagementAPI.Services
                 IsSuccess = true,
                 Message = "Warehouse added succesfully!"
             };
+        }
+
+        public async Task<Result> GetAllWarehousesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Result> GetWarehouseByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Result> RemoveWarehouseByIdAsync(int id)
+        {
+            var warehouse = await _dbContext.Warehouses.FindAsync(id);
+
+            if (warehouse == null)
+            {
+                return new Result
+                {
+                    HttpStatusCode = HttpStatusCode.NotFound,
+                    IsSuccess = false,
+                    Message = "Warehouse not found!"
+                };
+            }
+
+            try
+            {
+                 _dbContext.Warehouses.Remove(warehouse);
+            }
+            catch (Exception e)
+            {
+                return new Result
+                {
+                    HttpStatusCode = HttpStatusCode.InternalServerError,
+                    IsSuccess = false,
+                    Message = $"Could not delete warehouse. Exception occured. Exception message: {e.Message}"
+                };
+            }
+
+            return new Result
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                IsSuccess = true,
+                Message = "Warehouse delete successfully"
+            };
+        }
+
+        public async Task<Result> UpdateWarehouseAsync(int id, string name)
+        {
+            throw new NotImplementedException();
         }
     }
 }
