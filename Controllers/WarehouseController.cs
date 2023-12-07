@@ -4,6 +4,7 @@ using WarehouseMenagementAPI.Exceptions;
 using WarehouseMenagementAPI.Helpers;
 using WarehouseMenagementAPI.Models;
 using WarehouseMenagementAPI.Services;
+using WarehouseMenagementAPI.Services.Models;
 
 namespace WarehouseMenagementAPI.Controllers
 {
@@ -40,6 +41,19 @@ namespace WarehouseMenagementAPI.Controllers
             }
 
             return BadRequest(result);
+        }
+
+        [HttpDelete("RemoveWarehouseById")]
+        public async Task<IActionResult> RemoveWarehouseById([FromQuery] int id)
+        {
+            var warehouseToDelete = await _warehouseService.RemoveWarehouseByIdAsync(id);
+
+            if (warehouseToDelete.IsSuccess)
+            {
+                return Ok(warehouseToDelete);
+            }
+
+            return BadRequest(warehouseToDelete);
         }
     }
 }

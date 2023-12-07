@@ -90,6 +90,7 @@ namespace WarehouseMenagementAPI.Services
             try
             {
                  _dbContext.Warehouses.Remove(warehouse);
+                await _dbContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
