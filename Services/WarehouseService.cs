@@ -85,7 +85,7 @@ namespace WarehouseMenagementAPI.Services
                 {
                     HttpStatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
-                    Message = "The list of current warehouses",
+                    Message = "The list of current warehouses in data!",
                     Data = warehouses
                 };
             }
@@ -100,9 +100,41 @@ namespace WarehouseMenagementAPI.Services
             }
         }
 
-        public async Task<Result> GetWarehouseByIdAsync(int id)
+        public async Task<WarehouseResult<Warehouse>> GetWarehouseByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var warehouse = await _dbContext.Warehouses.FirstOrDefaultAsync(w => w.WarehouseId == id);
+
+                if (warehouse != null)
+                {
+                    return new WarehouseResult<Warehouse>
+                    {
+                        HttpStatusCode = HttpStatusCode.OK,
+                        IsSuccess = true,
+                        Message = "Choosed warehouse in data!",
+                        Data = warehouse
+                    };
+                }
+                else
+                {
+                    return new WarehouseResult<Warehouse>
+                    {
+                        HttpStatusCode = HttpStatusCode.InternalServerError,
+                        IsSuccess = false,
+                        Message = "Warehouse not found!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new WarehouseResult<Warehouse>
+                {
+                    HttpStatusCode = HttpStatusCode.InternalServerError,
+                    IsSuccess = false,
+                    Message = $"Internal server error: {e.Message}"
+                };
+            }
         }
 
         public async Task<Result> RemoveWarehouseByIdAsync(int id)

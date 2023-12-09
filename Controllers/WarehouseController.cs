@@ -53,7 +53,7 @@ namespace WarehouseMenagementAPI.Controllers
                 return Ok(warehouseToDelete);
             }
 
-            return BadRequest();
+            return BadRequest(warehouseToDelete);
         }
 
         [HttpGet("GetAllWarehouses")]
@@ -66,7 +66,18 @@ namespace WarehouseMenagementAPI.Controllers
                 return Ok(warehouses);
             }
 
-            return BadRequest();
+            return BadRequest(warehouses);
+        }
+
+        [HttpGet("GetWarehouseById")]
+        public async Task<IActionResult> GetWarehouseById([FromQuery] int warehouseId)
+        {
+            var warehouse = await _warehouseService.GetWarehouseByIdAsync(warehouseId);
+            if (warehouse.IsSuccess)
+            {
+                return Ok(warehouse);
+            }
+            return BadRequest(warehouse);
         }
     }
 }
