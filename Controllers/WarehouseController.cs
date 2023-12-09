@@ -44,9 +44,9 @@ namespace WarehouseMenagementAPI.Controllers
         }
 
         [HttpDelete("RemoveWarehouseById")]
-        public async Task<IActionResult> RemoveWarehouseById([FromQuery] int id)
+        public async Task<IActionResult> RemoveWarehouseById([FromQuery] int warehoused)
         {
-            var warehouseToDelete = await _warehouseService.RemoveWarehouseByIdAsync(id);
+            var warehouseToDelete = await _warehouseService.RemoveWarehouseByIdAsync(warehoused);
 
             if (warehouseToDelete.IsSuccess)
             {

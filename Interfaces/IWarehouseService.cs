@@ -8,7 +8,7 @@ namespace WarehouseMenagementAPI.Interfaces
         Task<Result> AddWarehouseAsync(string name, int warehouseId);
         Task<Result> RemoveWarehouseByIdAsync(int id);
         Task<Result> UpdateWarehouseAsync(int id, string name);
-        Task<WarehouseResult<Warehouse>> GetWarehouseByIdAsync(int id);
-        Task<ListResult<List<Warehouse>>> GetAllWarehousesAsync();
+        Task<Result<Warehouse>> GetWarehouseByIdAsync(int id);
+        Task<Result<List<Warehouse>>> GetAllWarehousesAsync();
     }
 }

@@ -75,13 +75,13 @@ namespace WarehouseMenagementAPI.Services
             };
         }
 
-        public async Task<ListResult<List<Warehouse>>> GetAllWarehousesAsync()
+        public async Task<Result<List<Warehouse>>> GetAllWarehousesAsync()
         {
             try
             {
                var warehouses = await _dbContext.Warehouses.ToListAsync();
 
-                return new ListResult<List<Warehouse>>
+                return new Result<List<Warehouse>>
                 {
                     HttpStatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
@@ -91,7 +91,7 @@ namespace WarehouseMenagementAPI.Services
             }
             catch (Exception e)
             {
-                return new ListResult<List<Warehouse>>
+                return new Result<List<Warehouse>>
                 {
                     HttpStatusCode = HttpStatusCode.InternalServerError,
                     IsSuccess = false,
@@ -100,7 +100,7 @@ namespace WarehouseMenagementAPI.Services
             }
         }
 
-        public async Task<WarehouseResult<Warehouse>> GetWarehouseByIdAsync(int id)
+        public async Task<Result<Warehouse>> GetWarehouseByIdAsync(int id)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace WarehouseMenagementAPI.Services
 
                 if (warehouse != null)
                 {
-                    return new WarehouseResult<Warehouse>
+                    return new Result<Warehouse>
                     {
                         HttpStatusCode = HttpStatusCode.OK,
                         IsSuccess = true,
@@ -118,7 +118,7 @@ namespace WarehouseMenagementAPI.Services
                 }
                 else
                 {
-                    return new WarehouseResult<Warehouse>
+                    return new Result<Warehouse>
                     {
                         HttpStatusCode = HttpStatusCode.InternalServerError,
                         IsSuccess = false,
@@ -128,7 +128,7 @@ namespace WarehouseMenagementAPI.Services
             }
             catch (Exception e)
             {
-                return new WarehouseResult<Warehouse>
+                return new Result<Warehouse>
                 {
                     HttpStatusCode = HttpStatusCode.InternalServerError,
                     IsSuccess = false,
@@ -139,7 +139,7 @@ namespace WarehouseMenagementAPI.Services
 
         public async Task<Result> RemoveWarehouseByIdAsync(int id)
         {
-            var warehouse = await _dbContext.Warehouses.FindAsync(id);
+            var warehouse = await _dbContext.Warehouses.FirstOrDefaultAsync(w => w.WarehouseId == id);
 
             if (warehouse == null)
             {
