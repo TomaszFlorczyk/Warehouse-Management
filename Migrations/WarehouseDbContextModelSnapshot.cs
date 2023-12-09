@@ -31,7 +31,6 @@ namespace WarehouseMenagementAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WarehouseId")
@@ -123,6 +122,9 @@ namespace WarehouseMenagementAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Warehouses");
@@ -131,7 +133,7 @@ namespace WarehouseMenagementAPI.Migrations
             modelBuilder.Entity("WarehouseMenagementAPI.Models.Alley", b =>
                 {
                     b.HasOne("WarehouseMenagementAPI.Models.Warehouse", "Warehouse")
-                        .WithMany()
+                        .WithMany("Alleys")
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -142,12 +144,22 @@ namespace WarehouseMenagementAPI.Migrations
             modelBuilder.Entity("WarehouseMenagementAPI.Models.Product", b =>
                 {
                     b.HasOne("WarehouseMenagementAPI.Models.Alley", "Alley")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("AlleyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Alley");
+                });
+
+            modelBuilder.Entity("WarehouseMenagementAPI.Models.Alley", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("WarehouseMenagementAPI.Models.Warehouse", b =>
+                {
+                    b.Navigation("Alleys");
                 });
 #pragma warning restore 612, 618
         }

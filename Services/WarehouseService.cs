@@ -14,7 +14,7 @@ namespace WarehouseMenagementAPI.Services
             _dbContext = dbContext;
         }
 
-        public async Task<Result> AddWarehouseAsync(string name)
+        public async Task<Result> AddWarehouseAsync(string name, int warehouseId)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -26,9 +26,10 @@ namespace WarehouseMenagementAPI.Services
                 };
             }
 
-            var warehouseExist = _dbContext.Warehouses.Any(w => w.Name == name);
+            var warehouseNameExist = _dbContext.Warehouses.Any(w => w.Name == name);
+            var warehouseIdExist = _dbContext.Warehouses.Any(w => w.WarehouseId == warehouseId);
 
-            if (warehouseExist)
+            if (warehouseNameExist)
             {
                 return new Result
                 {
@@ -37,12 +38,21 @@ namespace WarehouseMenagementAPI.Services
                     Message = "Warehouse with this name already exists!"
                 };
             }
-            
-            var warehouse = new Warehouse { Name = name };
+            else if(warehouseIdExist)
+            {
+                return new Result
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    Message = "Warehouse with this Id already exists!"
+                };
+            }
+
+            var warehouseToCreate = new Warehouse { Name = name, WarehouseId = warehouseId};
 
             try
             {
-                await _dbContext.Warehouses.AddAsync(warehouse);
+                await _dbContext.Warehouses.AddAsync(warehouseToCreate);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception e)

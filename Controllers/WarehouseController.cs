@@ -31,9 +31,9 @@ namespace WarehouseMenagementAPI.Controllers
         }
 
         [HttpPost("AddWarehouse")]
-        public async Task<IActionResult> AddWarehouse([FromQuery] string name)
+        public async Task<IActionResult> AddWarehouse([FromQuery] string name, int warehouseId)
         {
-            var result =  await _warehouseService.AddWarehouseAsync(name);
+            var result =  await _warehouseService.AddWarehouseAsync(name, warehouseId);
 
             if (result.IsSuccess)
             {
