@@ -1,4 +1,5 @@
-﻿using WarehouseMenagementAPI.Services.Models;
+﻿using WarehouseMenagementAPI.Models;
+using WarehouseMenagementAPI.Services.Models;
 
 namespace WarehouseMenagementAPI.Interfaces
 {
@@ -8,6 +9,6 @@ namespace WarehouseMenagementAPI.Interfaces
         Task<Result> RemoveWarehouseByIdAsync(int id);
         Task<Result> UpdateWarehouseAsync(int id, string name);
         Task<Result> GetWarehouseByIdAsync(int id);
-        Task<Result> GetAllWarehousesAsync();
+        Task<ListResult<List<Warehouse>>> GetAllWarehousesAsync();
     }
 }

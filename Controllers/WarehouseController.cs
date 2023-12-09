@@ -53,7 +53,20 @@ namespace WarehouseMenagementAPI.Controllers
                 return Ok(warehouseToDelete);
             }
 
-            return BadRequest(warehouseToDelete);
+            return BadRequest();
+        }
+
+        [HttpGet("GetAllWarehouses")]
+        public async Task<IActionResult> GetAllWarehouse()
+        {
+            var warehouses = await _warehouseService.GetAllWarehousesAsync();
+
+            if (warehouses.IsSuccess)
+            {
+                return Ok(warehouses);
+            }
+
+            return BadRequest();
         }
     }
 }

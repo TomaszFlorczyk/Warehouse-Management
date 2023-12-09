@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 using WarehouseMenagementAPI.Interfaces;
 using WarehouseMenagementAPI.Models;
 using WarehouseMenagementAPI.Services.Models;
@@ -73,9 +75,29 @@ namespace WarehouseMenagementAPI.Services
             };
         }
 
-        public async Task<Result> GetAllWarehousesAsync()
+        public async Task<ListResult<List<Warehouse>>> GetAllWarehousesAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+               var warehouses = await _dbContext.Warehouses.ToListAsync();
+
+                return new ListResult<List<Warehouse>>
+                {
+                    HttpStatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Message = "The list of current warehouses",
+                    Data = warehouses
+                };
+            }
+            catch (Exception e)
+            {
+                return new ListResult<List<Warehouse>>
+                {
+                    HttpStatusCode = HttpStatusCode.InternalServerError,
+                    IsSuccess = false,
+                    Message = $"Internal server error: {e.Message}"
+                };
+            }
         }
 
         public async Task<Result> GetWarehouseByIdAsync(int id)
