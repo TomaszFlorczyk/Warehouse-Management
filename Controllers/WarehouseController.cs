@@ -79,17 +79,5 @@ namespace WarehouseMenagementAPI.Controllers
             }
             return BadRequest(warehouse);
         }
-
-        [HttpPut("UpdateWarehouse")]
-        public async Task<IActionResult> UpdateWarehouse([FromQuery] int id, string newName, int newId)
-        {
-            var warehouseToUpdate = await _warehouseService.UpdateWarehouseAsync(id, newName, newId);
-
-            if (warehouseToUpdate.IsSuccess)
-            {
-                return Ok(warehouseToUpdate);
-            }
-            return BadRequest(warehouseToUpdate);
-        }
     }
 }

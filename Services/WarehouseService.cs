@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Net;
 using WarehouseMenagementAPI.Interfaces;
 using WarehouseMenagementAPI.Models;
@@ -175,64 +174,9 @@ namespace WarehouseMenagementAPI.Services
             };
         }
 
-        public async Task<Result> UpdateWarehouseAsync(int warehouseId, string newName, int newId)
+        public async Task<Result> UpdateWarehouseAsync(int id, string name)
         {
-            var existingWarehouse = await _dbContext.Warehouses.FirstOrDefaultAsync(w => w.WarehouseId == warehouseId);
-
-            if (existingWarehouse == null)
-            {
-                return new Result
-                {
-                    HttpStatusCode = HttpStatusCode.BadRequest,
-                    IsSuccess = false,
-                    Message = "Warehouse not found!"
-                };
-            }
-
-            var isNameOrIdAlreadyExist = _dbContext.Warehouses.Any(w => w.Name == newName && w.WarehouseId == newId);
-
-            if (isNameOrIdAlreadyExist)
-            {
-                return new Result
-                {
-                    HttpStatusCode = HttpStatusCode.BadRequest,
-                    IsSuccess = false,
-                    Message = "Warehouse already exists!"
-                };
-            }
-
-            existingWarehouse.WarehouseId = newId;
-            existingWarehouse.Name = newName;
-
-            /*if (existingWarehouse.WarehouseId == newId && existingWarehouse.Name != newName)
-            {
-                existingWarehouse.Name = newName;
-            }
-            else if (existingWarehouse.WarehouseId != newId && existingWarehouse.Name == newName)
-            {
-                existingWarehouse.WarehouseId = newId;
-            }*/
-
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return new Result
-                {
-                    HttpStatusCode = HttpStatusCode.InternalServerError,
-                    IsSuccess = false,
-                    Message = $"Could not update warehouse. Exception occured. Exception message {e.Message}"
-                };
-            }
-
-            return new Result
-            {
-                HttpStatusCode = HttpStatusCode.OK,
-                IsSuccess = true,
-                Message = "Warehouse updated successfully"
-            };
+            throw new NotImplementedException();
         }
     }
 }
