@@ -33,7 +33,7 @@ namespace WarehouseMenagementAPI.Controllers
         [HttpPost("AddWarehouse")]
         public async Task<IActionResult> AddWarehouse([FromQuery] string name, int warehouseId)
         {
-            var result =  await _warehouseService.AddWarehouseAsync(name, warehouseId);
+            var result = await _warehouseService.AddWarehouseAsync(name, warehouseId);
 
             if (result.IsSuccess)
             {
@@ -78,6 +78,17 @@ namespace WarehouseMenagementAPI.Controllers
                 return Ok(warehouse);
             }
             return BadRequest(warehouse);
+        }
+
+        [HttpPut("UpdateWarehouse")]
+        public async Task<IActionResult> UpdateWarehouse([FromQuery] int id, string newName, int newId)
+        {
+            var warehouseToUpdate = await _warehouseService.UpdateWarehouseAsync(id, newName, newId);
+            if (warehouseToUpdate.IsSuccess)
+            {
+                return Ok(warehouseToUpdate);
+            }
+            return BadRequest(warehouseToUpdate);
         }
     }
 }
