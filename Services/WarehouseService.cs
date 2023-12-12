@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Net;
+using WarehouseMenagementAPI.Helpers;
 using WarehouseMenagementAPI.Interfaces;
 using WarehouseMenagementAPI.Models;
 using WarehouseMenagementAPI.Services.Models;
@@ -15,6 +16,53 @@ namespace WarehouseMenagementAPI.Services
         public WarehouseService(WarehouseDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<Result> AddRandomProducts(int warehouseId)
+        {
+            if (int.IsEvenInteger(warehouseId))
+            {
+                return new Result
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    Message = "Invalid warehouse data!"
+                };
+            }
+            var warehouseExists = await _dbContext.Warehouses.AnyAsync(w => w.WarehouseId == warehouseId);
+
+            if (!warehouseExists)
+            {
+                return new Result
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    Message = "Warehouse not found!"
+                };
+            }
+
+            try
+            {
+                var createRandomProducts = new Create100RandomProducts(_dbContext);
+                createRandomProducts.CreateRandomProducts(warehouseId);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return new Result
+                {
+                    HttpStatusCode = HttpStatusCode.InternalServerError,
+                    IsSuccess = false,
+                    Message = $"Could not create random products. Exception occured. Exception message: {e.Message}"
+                };
+            }
+
+            return new Result
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                IsSuccess = true,
+                Message = "Random products was succesfuly added"
+            };
         }
 
         public async Task<Result> AddWarehouseAsync(string name, int warehouseId)

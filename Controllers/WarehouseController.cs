@@ -22,12 +22,15 @@ namespace WarehouseMenagementAPI.Controllers
         }
 
         [HttpPost("AddRandomProducts")]
-        public IActionResult AddRandomProdducts()
+        public async Task<IActionResult> AddRandomProdducts([FromQuery]int warehouseId)
         {
-            var createRandomProducts = new Create100RandomProducts(_dbContext);
-            createRandomProducts.CreateRandomProducts();
-            _dbContext.SaveChanges();
-            return Ok("Random products was succesfuly added");
+            var result = await _warehouseService.AddRandomProducts(warehouseId);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpPost("AddWarehouse")]

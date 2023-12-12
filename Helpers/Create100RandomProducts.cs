@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using WarehouseMenagementAPI.Models;
+using WarehouseMenagementAPI.Services.Models;
 
 namespace WarehouseMenagementAPI.Helpers
 {
@@ -12,10 +14,17 @@ namespace WarehouseMenagementAPI.Helpers
             _dbContext = dbContext;
         }
 
-        public void CreateRandomProducts()
+        public void CreateRandomProducts(int warehouseId)
         {
+            var warehouseExists = _dbContext.Warehouses.Any(w => w.WarehouseId == warehouseId);
+
             for (int i = 0; i < 100; i++)
             {
+                if (!warehouseExists)
+                {
+                    Console.WriteLine("Warehouse not found!");
+                }
+
                 string postalCode = RandomProductGenerator.GenerateRandomPostalCode();
 
                 int alleyId = RandomProductGenerator.GenerateAlleyIdFromPostalCode(postalCode);
@@ -31,7 +40,8 @@ namespace WarehouseMenagementAPI.Helpers
                     Name = RandomProductGenerator.GenerateRandomProductName(),
                     Price = RandomProductGenerator.GenerateRandomProducPrice(),
                     PostalCode = postalCode,
-                    AlleyId = alleyId
+                    AlleyId = alleyId,
+                    WarehouseId = warehouseId
                 };
 
                 bool productExists = _dbContext.ProductDelivery
