@@ -12,7 +12,7 @@ using WarehouseMenagementAPI.Models;
 namespace WarehouseMenagementAPI.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20231209113507_WarehousingModel")]
+    [Migration("20231212161713_WarehousingModel")]
     partial class WarehousingModel
     {
         /// <inheritdoc />
@@ -72,6 +72,9 @@ namespace WarehouseMenagementAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AlleyId");
@@ -108,7 +111,12 @@ namespace WarehouseMenagementAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AlleyId");
 
                     b.ToTable("SentProducts");
                 });
@@ -148,6 +156,17 @@ namespace WarehouseMenagementAPI.Migrations
                 {
                     b.HasOne("WarehouseMenagementAPI.Models.Alley", "Alley")
                         .WithMany("Products")
+                        .HasForeignKey("AlleyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Alley");
+                });
+
+            modelBuilder.Entity("WarehouseMenagementAPI.Models.SentProducts", b =>
+                {
+                    b.HasOne("WarehouseMenagementAPI.Models.Alley", "Alley")
+                        .WithMany()
                         .HasForeignKey("AlleyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

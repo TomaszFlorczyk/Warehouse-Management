@@ -5,6 +5,7 @@ namespace WarehouseMenagementAPI.Interfaces
 {
     public interface IWarehouseService 
     {
+        Task<Result> AddRandomProducts(int warehouseId);
         Task<Result> AddWarehouseAsync(string name, int warehouseId);
         Task<Result> RemoveWarehouseByIdAsync(int id);
         Task<Result> UpdateWarehouseAsync(int id, string name, int newId);
