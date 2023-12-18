@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<WarehouseDbContext>(
     options => options.UseSqlServer(configuration.GetConnectionString("WarehouseDBConnection")));
 builder.Services.AddScoped<WarehouseService>();
+builder.Services.AddScoped<AlleyService>();
 
 var app = builder.Build();
 

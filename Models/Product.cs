@@ -1,4 +1,8 @@
-﻿namespace WarehouseMenagementAPI.Models
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WarehouseMenagementAPI.Models
 {
     public class Product
     {
@@ -8,6 +12,7 @@
         public decimal Price { get; set; }
         public string PostalCode { get; set; }
         public int WarehouseId { get; set; }
+
 
         public int AlleyId { get; set; }
         public Alley Alley { get; set; }

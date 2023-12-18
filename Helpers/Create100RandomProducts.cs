@@ -23,25 +23,29 @@ namespace WarehouseMenagementAPI.Helpers
                 if (!warehouseExists)
                 {
                     Console.WriteLine("Warehouse not found!");
+                    continue;
                 }
 
                 string postalCode = RandomProductGenerator.GenerateRandomPostalCode();
 
                 int alleyId = RandomProductGenerator.GenerateAlleyIdFromPostalCode(postalCode);
-                bool alleyExists = _dbContext.Alleys.Any(a => a.Id == alleyId);
+                var alleyExists = _dbContext.Alleys.Any(a => a.Id == alleyId && a.WarehouseId == warehouseId);
+
+                //CZEMU TO NIE DZIAŁA
 
                 if (!alleyExists)
                 {
                     continue;
                 }
+
                 Product randomProduct = new Product
                 {
                     Type = RandomProductGenerator.GenerateRandomProductType(),
                     Name = RandomProductGenerator.GenerateRandomProductName(),
                     Price = RandomProductGenerator.GenerateRandomProducPrice(),
-                    PostalCode = postalCode,
-                    AlleyId = alleyId,
-                    WarehouseId = warehouseId
+                    PostalCode = postalCode,                    
+                    WarehouseId = warehouseId,
+                    AlleyId = alleyId
                 };
 
                 bool productExists = _dbContext.ProductDelivery
@@ -63,6 +67,7 @@ namespace WarehouseMenagementAPI.Helpers
                     }
                 }
             }
+            _dbContext.SaveChanges();
         }
     }
 }

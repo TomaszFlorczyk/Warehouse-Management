@@ -12,7 +12,7 @@ using WarehouseMenagementAPI.Models;
 namespace WarehouseMenagementAPI.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20231212172816_WarehousingModel")]
+    [Migration("20231218200354_WarehousingModel")]
     partial class WarehousingModel
     {
         /// <inheritdoc />
@@ -32,9 +32,6 @@ namespace WarehouseMenagementAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AlleyId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
