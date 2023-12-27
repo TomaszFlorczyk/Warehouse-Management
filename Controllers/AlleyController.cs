@@ -20,9 +20,9 @@ namespace WarehouseMenagementAPI.Controllers
         }
 
         [HttpPost("AddAlley")]
-        public async Task<IActionResult> AddAlley([FromQuery] string name, int warehouseId)
+        public async Task<IActionResult> AddAlley([FromQuery] string name, int alleyId, int warehouseId)
         {
-            var result = await _alleyService.AddAlleyAsync(name, warehouseId);
+            var result = await _alleyService.AddAlleyAsync(name, alleyId, warehouseId);
 
             if (result.IsSuccess)
             {

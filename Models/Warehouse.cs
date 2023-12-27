@@ -3,9 +3,8 @@
     public class Warehouse
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int WarehouseId { get; set; }
-
-        public List<Alley> Alleys { get; set; }
+        public ICollection<Alley> Alleys { get; set; } = new List<Alley>();
     }
 }

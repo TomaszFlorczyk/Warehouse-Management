@@ -20,15 +20,6 @@ namespace WarehouseMenagementAPI.Services
 
         public async Task<Result> AddRandomProducts(int warehouseId)
         {
-            if (int.IsEvenInteger(warehouseId))
-            {
-                return new Result
-                {
-                    HttpStatusCode = HttpStatusCode.BadRequest,
-                    IsSuccess = false,
-                    Message = "Invalid warehouse data!"
-                };
-            }
             var warehouseExists = await _dbContext.Warehouses.AnyAsync(w => w.WarehouseId == warehouseId);
 
             if (!warehouseExists)

@@ -16,17 +16,30 @@ namespace WarehouseMenagementAPI.Services
             _dbContext = dbContext;
         }
 
-        public async Task<Result> AddAlleyAsync(string name, int warehouseId)
+        public async Task<Result> AddAlleyAsync(string name, int alleyId, int warehouseId)
         {
-            if (string.IsNullOrEmpty(name) && int.IsEvenInteger(warehouseId))
+            if (string.IsNullOrEmpty(name))
             {
                 return new Result
                 {
                     HttpStatusCode = HttpStatusCode.BadRequest,
                     IsSuccess = false,
-                    Message = "Invalid Alley Data!"
+                    Message = "Invalid Alley Name!"
                 };
             }
+
+            var warehouseFromDB = await _dbContext.Warehouses.FirstOrDefaultAsync(w => w.WarehouseId == warehouseId);
+
+            if (warehouseFromDB is null)
+            {
+                return new Result
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    Message = "Warehouse not found!"
+                };
+            }
+
             var alleyNameExists = _dbContext.Alleys.Any(a => a.Name == name);
 
             if (alleyNameExists)
@@ -35,11 +48,23 @@ namespace WarehouseMenagementAPI.Services
                 {
                     HttpStatusCode = HttpStatusCode.BadRequest,
                     IsSuccess = false,
-                    Message = "AlleyName already exists!"
+                    Message = "Alley Name already exists!"
                 };
             }
 
-            var alleyToCreate = new Alley { Name = name, WarehouseId = warehouseId};
+            var alleyIdExists = _dbContext.Alleys.Any(a => a.AlleyId == alleyId && a.Warehouse == warehouseFromDB);
+
+            if (alleyIdExists)
+            {
+                return new Result
+                {
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    IsSuccess = false,
+                    Message = "Alley Id already exists in Warehouse!"
+                };
+            }
+
+            var alleyToCreate = new Alley { Name = name, AlleyId = alleyId, Warehouse = warehouseFromDB };
 
             try
             {
