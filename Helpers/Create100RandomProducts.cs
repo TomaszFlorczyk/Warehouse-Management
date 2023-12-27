@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using WarehouseMenagementAPI.Models;
-using WarehouseMenagementAPI.Services.Models;
+﻿using WarehouseMenagementAPI.Models;
 
 namespace WarehouseMenagementAPI.Helpers
 {
@@ -16,53 +13,40 @@ namespace WarehouseMenagementAPI.Helpers
 
         public void CreateRandomProducts(int warehouseId)
         {
-            var warehouseExists = _dbContext.Warehouses.Any(w => w.WarehouseId == warehouseId);
-
             for (int i = 0; i < 100; i++)
             {
-                if (!warehouseExists)
-                {
-                    Console.WriteLine("Warehouse not found!");
-                }
-
                 string postalCode = RandomProductGenerator.GenerateRandomPostalCode();
-
                 int alleyId = RandomProductGenerator.GenerateAlleyIdFromPostalCode(postalCode);
-                bool alleyExists = _dbContext.Alleys.Any(a => a.Id == alleyId);
+                var alleyFromDB = _dbContext.Alleys.FirstOrDefault(a => a.AlleyId == alleyId);
 
-                if (!alleyExists)
+                if (alleyFromDB is null)
                 {
                     continue;
                 }
+
                 Product randomProduct = new Product
                 {
                     Type = RandomProductGenerator.GenerateRandomProductType(),
                     Name = RandomProductGenerator.GenerateRandomProductName(),
                     Price = RandomProductGenerator.GenerateRandomProducPrice(),
                     PostalCode = postalCode,
-                    AlleyId = alleyId,
-                    WarehouseId = warehouseId
+                    Alley = alleyFromDB
                 };
 
-                bool productExists = _dbContext.ProductDelivery
-                    .Any(p => p.Name == randomProduct.Name && p.Type == randomProduct.Type);
+                var productFromDB = _dbContext.ProductDelivery
+                    .FirstOrDefault(p => p.Name == randomProduct.Name && p.Type == randomProduct.Type);
 
-                if (!productExists)
+                if (productFromDB is null)
                 {
                     _dbContext.ProductDelivery.Add(randomProduct);
                 }
                 else
                 {
-                    var existingProduct = _dbContext.ProductDelivery
-                        .FirstOrDefault(p => p.Name == randomProduct.Name && p.Type == randomProduct.Type);
-
-                    if (existingProduct != null)
-                    {
-                        randomProduct.Price = existingProduct.Price;
-                        _dbContext.ProductDelivery.Add(randomProduct);
-                    }
+                    randomProduct.Price = productFromDB.Price;
+                    _dbContext.ProductDelivery.Add(randomProduct);
                 }
             }
+            _dbContext.SaveChanges();
         }
     }
 }
