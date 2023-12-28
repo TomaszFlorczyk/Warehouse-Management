@@ -42,5 +42,17 @@ namespace WarehouseMenagementAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("GetAlleyById")]
+        public async Task<IActionResult> GetAlleyByIdAsync([FromQuery] int alleyId)
+        {
+            var result = await _alleyService.GetAlleyByIdAsync(alleyId);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

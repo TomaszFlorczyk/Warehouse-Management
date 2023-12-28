@@ -100,7 +100,7 @@ namespace WarehouseMenagementAPI.Services
                     HttpStatusCode = HttpStatusCode.OK,
                     IsSuccess = true,
                     Message = "The list of current alleys in date!",
-                    Data = alleys
+                    Data = alleys,
                 };
             }
             catch (Exception e)
@@ -114,9 +114,42 @@ namespace WarehouseMenagementAPI.Services
             }
         }
 
-        public Task<Result> GetAlleyByIdAsync(int alleyId)
+        public async Task<Result> GetAlleyByIdAsync(int alleyId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var alley = await _dbContext.Alleys.FirstOrDefaultAsync(a => a.Id == alleyId);
+
+                if (alley != null)
+                {
+                    return new Result<Alley>
+                    {
+                        HttpStatusCode = HttpStatusCode.OK,
+                        IsSuccess = true,
+                        Message = "Choosed Alley in data!",
+                        Data = alley
+                    };
+                }
+                else
+                {
+                    return new Result<Alley>
+                    {
+                        HttpStatusCode = HttpStatusCode.InternalServerError,
+                        IsSuccess = false,
+                        Message = "Alley not found",
+                        Data = null
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new Result<Alley>
+                {
+                    HttpStatusCode = HttpStatusCode.InternalServerError,
+                    IsSuccess = false,
+                    Message = $"Internal server error: {e.Message}"
+                };
+            }
         }
 
         public Task<Result> GetAlleyByNameAsync(string name)
