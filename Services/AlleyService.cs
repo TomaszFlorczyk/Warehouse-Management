@@ -89,9 +89,29 @@ namespace WarehouseMenagementAPI.Services
             };
         }
 
-        public Task<Result> GetAllAlleys()
+        public async Task<Result> GetAllAlleysAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var alleys = await _dbContext.Alleys.ToListAsync();
+
+                return new Result<List<Alley>>
+                {
+                    HttpStatusCode = HttpStatusCode.OK,
+                    IsSuccess = true,
+                    Message = "The list of current alleys in date!",
+                    Data = alleys
+                };
+            }
+            catch (Exception e)
+            {
+                return new Result<List<Alley>>
+                {
+                    HttpStatusCode = HttpStatusCode.InternalServerError,
+                    IsSuccess = false,
+                    Message = $"Internal server error: {e.Message}"
+                };
+            }
         }
 
         public Task<Result> GetAlleyByIdAsync(int alleyId)

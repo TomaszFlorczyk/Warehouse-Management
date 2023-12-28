@@ -30,5 +30,17 @@ namespace WarehouseMenagementAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("GetAllAlleys")]
+        public async Task<IActionResult> GetAllAlleys()
+        {
+            var result = await _alleyService.GetAllAlleysAsync();
+
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
